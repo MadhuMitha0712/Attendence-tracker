@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Attendance Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            📚 <span>AttendTrack</span>
+        </div>
+
+        <nav>
+            <button class="nav-item active" onclick="showPage('dashboard')">
+                🏠 Dashboard
+            </button>
+
+            <button class="nav-item" onclick="showPage('students')">
+                👨‍🎓 Students
+            </button>
+
+            <button class="nav-item" onclick="showPage('attendance')">
+                ✅ Attendance
+            </button>
+
+            <button class="nav-item" onclick="showPage('reports')">
+                📊 Reports
+            </button>
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p>Student Attendance Management System</p>
+            </div>
+
+            <div class="date" id="currentDate"></div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboardPage" class="page active">
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="icon blue">👨‍🎓</div>
+
+                    <div>
+                        <p>Total Students</p>
+                        <h2 id="totalStudents">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="icon green">✅</div>
+
+                    <div>
+                        <p>Present Today</p>
+                        <h2 id="presentToday">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="icon red">❌</div>
+
+                    <div>
+                        <p>Absent Today</p>
+                        <h2 id="absentToday">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="icon purple">📈</div>
+
+                    <div>
+                        <p>Attendance %</p>
+                        <h2 id="attendancePercentage">0%</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Today's Attendance</h2>
+                        <p>Quick overview of today's attendance</p>
+                    </div>
+
+                    <button
+                        class="primary-btn"
+                        onclick="showPage('attendance')"
+                    >
+                        Mark Attendance
+                    </button>
+                </div>
+
+
+                <div id="dashboardAttendance"
+                     class="attendance-list">
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= STUDENTS ================= -->
+
+        <section id="studentsPage" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <h2>Students</h2>
+                    <p>Add and manage students</p>
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="openStudentModal()"
+                >
+                    + Add Student
+                </button>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="studentSearch"
+                        placeholder="Search student..."
+                        oninput="renderStudents()"
+                    >
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Year</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="studentTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ATTENDANCE ================= -->
+
+        <section id="attendancePage" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <h2>Mark Attendance</h2>
+                    <p>Select Present or Absent for each student</p>
+                </div>
+
+                <input
+                    type="date"
+                    id="attendanceDate"
+                >
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="attendance-actions">
+
+                    <button
+                        class="secondary-btn"
+                        onclick="markAll('present')"
+                    >
+                        ✓ Mark All Present
+                    </button>
+
+                    <button
+                        class="danger-btn"
+                        onclick="markAll('absent')"
+                    >
+                        ✕ Mark All Absent
+                    </button>
+
+                    <button
+                        class="primary-btn"
+                        onclick="saveAttendance()"
+                    >
+                        Save Attendance
+                    </button>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="attendanceTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <section id="reportsPage" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <h2>Attendance Reports</h2>
+                    <p>View student attendance percentage</p>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Present</th>
+                                <th>Absent</th>
+                                <th>Attendance %</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="reportTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= STUDENT MODAL ================= -->
+
+    <div
+        class="modal"
+        id="studentModal"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h2>Add Student</h2>
+                    <p>Enter student details</p>
+                </div>
+
+                <button
+                    class="close-btn"
+                    onclick="closeStudentModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="studentForm">
+
+                <div class="form-group">
+
+                    <label>Roll Number</label>
+
+                    <input
+                        type="text"
+                        id="rollNo"
+                        placeholder="Ex: 101"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Student Name</label>
+
+                    <input
+                        type="text"
+                        id="studentName"
+                        placeholder="Enter name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Department</label>
+
+                    <select id="department" required>
+
+                        <option value="">
+                            Select Department
+                        </option>
+
+                        <option value="Computer Science">
+                            Computer Science
+                        </option>
+
+                        <option value="Information Technology">
+                            Information Technology
+                        </option>
+
+                        <option value="Electronics">
+                            Electronics
+                        </option>
+
+                        <option value="Mechanical">
+                            Mechanical
+                        </option>
+
+                        <option value="Commerce">
+                            Commerce
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Year</label>
+
+                    <select id="studentYear" required>
+
+                        <option value="">
+                            Select Year
+                        </option>
+
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Add Student
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
